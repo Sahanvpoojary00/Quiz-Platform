@@ -1,0 +1,91 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Status {
+  PENDING
+  ACTIVE
+  COMPLETED
+}
+
+enum QuestionType {
+  MCQ
+  VISUAL
+  CODING
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model User {
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  password      String
+  role          Role         @default(USER)
+  score         Int          @default(0)
+  status        Status       @default(PENDING)
+  current_round Int          @default(1)
+  isBlocked     Boolean      @default(false)
+  canWriteQuiz  Boolean      @default(true)
+  clearedRound  Int          @default(0)
+  qualified     Boolean      @default(true)
+  isEliminated  Boolean      @default(false)
+  submissions   Submission[]
+  logs          AuditLog[]
+}
+
+model SystemState {
+  id           Int      @id @default(1)
+  status       String   @default("LOBBY") // LOBBY, ACTIVE, FINISHED
+  currentRound Int      @default(1)
+  cutoffScore  Int      @default(0)
+  updatedAt    DateTime @updatedAt
+}
+
+model Question {
+  id          String       @id @default(cuid())
+  type        QuestionType
+  content     String
+  options     String?
+  answer      String
+  test_cases  String?
+  marks       Int          @default(10)
+  time_limit  Int?         @default(30) // in seconds
+  round       Int?         // Associate with a specific round
+  submissions Submission[]
+}
+
+
+model Submission {
+  id          String   @id @default(cuid())
+  user_id     String
+  question_id String
+  answer      String
+  score       Int      @default(0)
+  time_taken  Int
+  user        User     @relation(fields: [user_id], references: [id])
+  question    Question @relation(fields: [question_id], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  user_id   String
+  event     String
+  severity  Severity
+  timestamp DateTime @default(now())
+  user      User     @relation(fields: [user_id], references: [id])
+}

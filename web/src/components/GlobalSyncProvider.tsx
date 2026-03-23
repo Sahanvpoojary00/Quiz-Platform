@@ -39,7 +39,7 @@ export function GlobalSyncProvider({ children }: { children: React.ReactNode }) 
           router.push('/lobby');
         } else if (nextState.status === 'ACTIVE') {
           const targetPath = `/quiz/${nextState.currentRound}`;
-          if (pathname !== targetPath && pathname !== '/dashboard' && !pathname.startsWith('/admin')) {
+          if (pathname !== targetPath && pathname !== '/dashboard' && pathname !== '/login' && !pathname.startsWith('/admin')) {
              router.push(targetPath);
           }
         } else if (nextState.status === 'FINISHED' && pathname !== '/dashboard' && pathname !== '/login') {

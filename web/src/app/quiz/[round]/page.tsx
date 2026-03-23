@@ -22,6 +22,11 @@ export default function QuizRound({ params }: { params: Promise<{ round: string 
       const userRes = await fetch('/api/user');
       const userData = await userRes.json();
 
+      if (!userData.user) {
+        router.push('/login');
+        return;
+      }
+
       // Check Quiz Access, Clearance & Elimination
       if (!userData.user.canWriteQuiz || userData.user.clearedRound < round - 1 || userData.user.isEliminated) {
         router.push('/dashboard?error=access_denied');

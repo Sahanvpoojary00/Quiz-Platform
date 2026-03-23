@@ -72,6 +72,15 @@ function DashboardContent() {
             <p className="text-zinc-400 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-green-500"></span>
               {user.email}
+              <button 
+                onClick={async () => {
+                  await fetch('/api/logout', { method: 'POST' });
+                  router.push('/login');
+                }}
+                className="ml-4 text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-red-400 transition-colors bg-zinc-800/50 px-3 py-1 rounded-lg border border-zinc-700/50"
+              >
+                Logout
+              </button>
             </p>
           </div>
           <div className="flex flex-wrap gap-8 text-center bg-zinc-950/50 p-6 rounded-xl border border-zinc-800/50">

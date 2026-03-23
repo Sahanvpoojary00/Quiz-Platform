@@ -44,6 +44,15 @@ export function AdminNavbar() {
           <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></div>
           <span className="text-xs font-mono text-zinc-400">System Live</span>
         </div>
+        <button 
+          onClick={async () => {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.href = '/login';
+          }}
+          className="ml-2 text-[10px] font-black uppercase tracking-widest text-zinc-600 hover:text-red-500 transition-colors border border-zinc-800 px-2 py-1 rounded hover:bg-zinc-800"
+        >
+          Logout
+        </button>
       </div>
     </nav>
   );
